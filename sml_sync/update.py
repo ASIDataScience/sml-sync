@@ -13,7 +13,7 @@ from .version import version
 from .dirs import ensure_parent_exists
 
 
-TAGS_URL = 'https://api.bitbucket.org/2.0/repositories/theasi/sml-sync/refs/tags?pagelen=100'  # noqa
+PYPI_JSON_URL = 'https://pypi.org/pypi/sml_sync/json'
 
 LOGGER = daiquiri.getLogger('version-check')
 
@@ -41,22 +41,14 @@ def _is_full_release(version):
 
 def _get_versions():
 
-    # Get to the last page of tags
+    # get the json feed
     versions = []
-    with urlopen(TAGS_URL, timeout=5) as response:
+    with urlopen(PYPI_JSON_URL, timeout=5) as response:
         json_response = json.load(response)
-        versions.extend([
-            semantic_version.Version(tag['name'])
-            for tag in json_response['values']
-        ])
-    while 'next' in json_response:
-        next_url = json_response['next']
-        with urlopen(next_url, timeout=5) as response:
-            json_response = json.load(response)
-            versions.extend([
-                semantic_version.Version(tag['name'])
-                for tag in json_response['values']
-            ])
+
+    versions = [semantic_version.Version(version)
+                for version in json_response['releases'].keys()
+                if _is_full_release(semantic_version.Version(version))]
 
     # Exclude release candidates and alpha releases
     full_versions = [
