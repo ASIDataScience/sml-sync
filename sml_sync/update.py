@@ -69,7 +69,7 @@ def _check_for_new_release():
             "You are using sml-sync version {current}, however "
             "version {latest} is available.\n"
             "You should upgrade with:\n\n"
-            "curl https://bitbucket.org/theasi/sml-sync/raw/{latest}/install.sh | bash"  # noqa
+            "pip install -U sml-sync"
         )
         print(template.format(current=current, latest=latest))
     _set_mtime(_last_update_path())
