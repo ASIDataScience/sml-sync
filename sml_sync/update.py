@@ -8,9 +8,8 @@ from urllib.request import urlopen
 import daiquiri
 import semantic_version
 
-from .version import version
 from .dirs import ensure_parent_exists
-
+from .version import version
 
 PYPI_JSON_URL = 'https://pypi.org/pypi/sml_sync/json'
 
