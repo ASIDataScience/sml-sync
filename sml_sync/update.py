@@ -1,6 +1,5 @@
 """Prompt the user to update sml-sync"""
 
-import errno
 import json
 import os
 import time
