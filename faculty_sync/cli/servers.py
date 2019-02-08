@@ -3,6 +3,9 @@ import uuid
 import faculty
 
 
+server_client = faculty.client("server")
+
+
 class NoValidServer(Exception):
     pass
 
@@ -21,10 +24,9 @@ def resolve_server(project_id, server=None, ensure_running=True):
 
 def _server_by_name(project_id, server_name, status=None):
     """Resolve a project ID and server name to a server ID."""
-    client = faculty.client("server")
     matching_servers = [
         server
-        for server in client.list(project_id)
+        for server in server_client.list(project_id)
         if server.name == server_name
     ]
     if status is not None:
@@ -49,8 +51,7 @@ def _server_by_name(project_id, server_name, status=None):
 
 def _any_server(project_id, status=None):
     """Get any running server from project."""
-    client = faculty.client("server")
-    servers_ = [server for server in client.list(project_id)]
+    servers_ = [server for server in server_client.list(project_id)]
     if status is not None:
         servers_ = [
             server for server in servers_ if server.status.value == status
